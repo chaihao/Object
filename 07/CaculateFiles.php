@@ -32,7 +32,7 @@ class CaculateFiles
      * [$dirSkip 统计跳过的目录规则]
      * @var array
      */
-    private $dirSkip = array(".", "..", '.svn');
+    private $dirSkip = array(".", "..", '.svn', '.git');
 
     public function __construct($ext = '', $dir = '', $showEveryFile = true, $dirSkip = array(), $lineSkip = array(), $fileSkip = array())
     {
@@ -103,6 +103,11 @@ class CaculateFiles
         $this->dump($dir, $this->readDir($dir));
     }
 
+    /**
+     * [readDir 读取目录]
+     * @param  [type] $dir [description]
+     * @return [type]      [description]
+     */
     private function readDir($dir)
     {
         $num = array('totalLine' => 0, 'lineNum' => 0, 'fileNum' => 0, 'filterNum' => 0);
@@ -113,9 +118,10 @@ class CaculateFiles
                     // 过滤目录
                     continue;
                 }
-                echo $dir . '/' . $file . '<br/>';
+                // echo $dir . '/' . $file . '<br/>';
                 // 判断 $file 是否为目录，若为目录，继续读取
                 if (is_dir($dir . '/' . $file)) {
+                	// echo $dir . '/' . $file.'<hr/>';
                     $result = $this->readDir($dir . '/' . $file);
                     $num['totalLine'] += $result['totalLine'];
                     $num['lineNum'] += $result['lineNum'];
@@ -149,7 +155,7 @@ class CaculateFiles
      */
     private function skipDir($dir)
     {
-        // print_r($this->dirSkip);
+    	// echo '<hr/>'.'---'.$dir.'<hr/>';
         if (in_array($dir, $this->dirSkip)) {
             return true;
         }
@@ -163,11 +169,9 @@ class CaculateFiles
      */
     private function skipFile($file)
     {
-        // print_r('-/'.$file.'/1-2');
-        // print_r($this->ext.'--');
 
-        // echo strtolower(strrchr($file, '.'));
-
+        // echo strtolower(strrchr($file, '.')).'<hr/>';
+    	// 获取文件格式
         if (strtolower(strrchr($file, '.')) != $this->ext) {
             // 非指定文件格式，跳过文件
             return true;
@@ -176,7 +180,9 @@ class CaculateFiles
             // 过滤条件为空
             return false;
         }
+        // echo $file.'<hr/>';
         foreach ($this->fileSkip as $skip) {
+            // echo strpos($file, $skip).'--<br>';
             if (strpos($file, $skip) === 0) {
                 // 查找字符串在文件中首次出现的位置，若存在跳过文件
                 return true;
@@ -197,6 +203,7 @@ class CaculateFiles
         $linenum = 0;
         $filternum = 0;
         foreach ($str as $value) {
+        	echo $value;
             if ($this->skipLine(trim($value))) {
                 $filternum++;
                 continue;
@@ -227,7 +234,7 @@ class CaculateFiles
             return true;
         }
         foreach ($this->lineSkip as $tag) {
-            // echo strpos($string, $tag);
+            // echo strpos($string, $tag).'--<br>';
             if (strpos($string, $tag) === 0) {
                 return true;
             }
@@ -252,7 +259,7 @@ class CaculateFiles
         echo $dir . " : \r\n<br/>";
         echo "TotalLine : " . $totalLine . "\r\n<br/>"; // 总行数
         echo "TotalLine filter : " . $filterNum . "\r\n<br/>"; // 过滤行数
-        echo "TotalLine with no comment and empty : " . $lineNum . "\r\n<br/>"; 
+        echo "TotalLine with no comment and empty : " . $lineNum . "\r\n<br/>";
         echo "TotalFiles : " . $fileNum . "\r\n<br/>"; // 文件数
 
     }

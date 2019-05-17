@@ -1,14 +1,15 @@
 <?php 
 
 require_once('CaculateFiles.php');
+require_once('../config.php');
+
 
 $obj = new CaculateFiles();
 
 $obj->setShowFlag(false);
+$obj->setFileSkip(array('i'));
 // $obj->setLineSkip(array());
 
-$obj->run('/Users/chaihao/Downloads/yingtao/yingtao_V3/yingtao_v3_api/pc/modules/v1');
+$obj->run(PI_APP_PATH);
 echo "<hr/>";
 $obj->run('/Users/chaihao/object/07');
-echo "<hr/>";
-$obj->run('/Users/chaihao/object/');

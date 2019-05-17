@@ -13,7 +13,7 @@ class Number
 	 * @param  string $max   [description]
 	 * @return [type]        [description]
 	 */
-	public function getRant($count= '1',$min='10000000',$max='99999999')
+	public function getRant($count= '100',$min='10000000',$max='99999999')
 	{
 
 		$num = 0;
